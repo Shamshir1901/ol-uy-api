@@ -150,6 +150,15 @@ class User implements
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $deletedAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $givenName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $familyName = null;
+
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $phone = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -269,6 +278,42 @@ class User implements
     public function setDeletedAt(?DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getGivenName(): ?string
+    {
+        return $this->givenName;
+    }
+
+    public function setGivenName(string $givenName): self
+    {
+        $this->givenName = $givenName;
+
+        return $this;
+    }
+
+    public function getFamilyName(): ?string
+    {
+        return $this->familyName;
+    }
+
+    public function setFamilyName(string $familyName): self
+    {
+        $this->familyName = $familyName;
+
+        return $this;
+    }
+
+    public function getPhone(): ?int
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(int $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }
