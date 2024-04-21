@@ -26,6 +26,8 @@ use App\Entity\Interfaces\DeletedAtSettableInterface;
 use App\Entity\Interfaces\UpdatedAtSettableInterface;
 use App\Repository\UserRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -158,6 +160,14 @@ class User implements
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $phone = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Company::class)]
+    private Collection $companies;
+
+    public function __construct()
+    {
+        $this->companies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -314,6 +324,36 @@ class User implements
     public function setPhone(int $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Company>
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Company $company): self
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies->add($company);
+            $company->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): self
+    {
+        if ($this->companies->removeElement($company)) {
+            // set the owning side to null (unless already changed)
+            if ($company->getUser() === $this) {
+                $company->setUser(null);
+            }
+        }
 
         return $this;
     }
