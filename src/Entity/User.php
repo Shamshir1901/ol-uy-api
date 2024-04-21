@@ -164,6 +164,9 @@ class User implements
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Company::class)]
     private Collection $companies;
 
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $type = null;
+
     public function __construct()
     {
         $this->companies = new ArrayCollection();
@@ -354,6 +357,18 @@ class User implements
                 $company->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

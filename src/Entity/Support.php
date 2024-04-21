@@ -28,6 +28,9 @@ class Support
     #[ORM\Column(type: Types::TEXT)]
     private ?string $question = null;
 
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $type = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class Support
     public function setQuestion(string $question): self
     {
         $this->question = $question;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
