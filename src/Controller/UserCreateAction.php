@@ -21,7 +21,11 @@ class UserCreateAction extends AbstractController
     {
         $this->validate($data);
 
-        $user = $userFactory->create($data->getEmail(), $data->getPassword());
+        $user = $userFactory->create($data->getEmail(), $data->getPassword(), $data->getFamilyName(),$data->getGivenName(),
+            (int)$data->getType(),
+            (string)$data->getPhone(),
+
+        );
         $userManager->save($user, true);
 
         return $user;

@@ -153,18 +153,27 @@ class User implements
     private ?DateTimeInterface $deletedAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $givenName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $familyName = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $phone = null;
+    #[ORM\Column(type: "string", length: 12)]
+    #[Groups(['user:read', 'user:write'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 12, max: 12, exactMessage: 'This value should have exactly 12 characters.')]
+    #[Assert\Regex(pattern: "/^\d+$/", message: 'This value should contain only digits.')]
+    #[Asser]
+    private ?string $phone = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Company::class)]
     private Collection $companies;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(type: "integer")]
+    #[Groups(['user:read', 'user:write'])]
+    #[Assert\Choice(choices: [0, 1], message: 'Choose a valid type: 0 (Individual) or 1 (Legal Entity).')]
     private ?int $type = null;
 
     public function __construct()
@@ -319,12 +328,12 @@ class User implements
         return $this;
     }
 
-    public function getPhone(): ?int
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function setPhone(int $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
